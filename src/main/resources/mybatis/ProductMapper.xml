@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.miniprojectshopapi.mapper.ProductMapper">
+
+    <resultMap id="productMap" type="map">
+        <!-- dynamic map, MyBatis will fill -->
+    </resultMap>
+
+    <select id="productList" resultType="map">
+        select t1.*, t2.path, t3.category1, t3.category2, t3.category3
+        from t_product t1
+                 join t_image t2 on t1.id = t2.product_id and t2.type = 1
+                 join t_category t3 on t1.category_id = t3.id
+    </select>
+
+    <select id="productList2" resultType="map">
+        select t3.*, t4.path from (select t1.*, t2.category1, t2.category2, t2.category3
+                                   from t_product t1 join t_category t2 on t1.category_id = t2.id) t3
+                                      left join (select * from t_image where type=1) t4
+                                                on t3.id = t4.product_id
+    </select>
+
+    <select id="productDetail" parameterType="int" resultType="map">
+        select t1.*, t2.path, t3.category1, t3.category2, t3.category3
+        from t_product t1
+                 join t_image t2 on t1.id = t2.product_id and t2.type = 3
+                 join t_category t3 on t1.category_id = t3.id
+        where t1.id = #{value}
+    </select>
+
+    <select id="productMainImages" parameterType="int" resultType="com.example.app.miniprojectshopapi.vo.ImageVO">
+        select * from t_image where product_id = #{value} and type = 2
+    </select>
+
+    <insert id="productInsert" parameterType="com.example.app.miniprojectshopapi.vo.ProductVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_product (product_name, product_price, delivery_price, add_delivery_price, tags,
+                               outbound_days, seller_id, category_id, active_yn, created_date)
+        VALUES (#{productName},#{productPrice},#{deliveryPrice},#{addDeliveryPrice},#{tags},
+                #{outboundDays},#{sellerId},#{categoryId},#{activeYn},#{createdDate})
+    </insert>
+
+    <delete id="productDelete" parameterType="int">
+        delete from t_product where id = #{value}
+    </delete>
+
+</mapper>

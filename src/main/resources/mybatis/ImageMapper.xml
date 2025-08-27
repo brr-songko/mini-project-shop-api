@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.miniprojectshopapi.mapper.ImageMapper">
+    <insert id="insertImage" parameterType="com.example.app.miniprojectshopapi.vo.ImageVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_image (product_id, type, path)
+        VALUES (#{productId}, #{type}, #{path})
+    </insert>
+
+    <select id="imageList" parameterType="int" resultType="com.example.app.miniprojectshopapi.vo.ImageVO">
+        select * from t_image where product_id = #{value}
+    </select>
+
+    <delete id="deleteImage" parameterType="int">
+        delete from t_image where id = #{value}
+    </delete>
+</mapper>
