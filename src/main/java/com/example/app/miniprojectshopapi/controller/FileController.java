@@ -58,7 +58,7 @@ public class FileController {
     }
 
     @GetMapping("/download/{productId}/{fileName}")
-    public Resource download(@PathVariable String productId, @PathVariable String fileName) throws Exception {
+    public Resource download(@PathVariable(value = "productId") String productId, @PathVariable(value="fileName") String fileName) throws Exception {
         File f = new File(uploadDir + "/" + productId, fileName);
         if (!f.exists()) throw new RuntimeException("file not found");
         return new FileSystemResource(f);
